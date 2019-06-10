@@ -20,6 +20,11 @@
             android:id="@+id/nav_tools"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/menu_tools" />
+        <item
+            android:id="@+id/nav_shoppingcart"
+            android:icon="@drawable/ic_shopping_cart_black_24dp"
+            android:title="@string/shopping_cart" />
+
     </group>
 
     <item android:title="Communicate">
@@ -29,9 +34,9 @@
                 android:icon="@drawable/ic_menu_share"
                 android:title="@string/menu_share" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="@string/menu_send" />
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_logout_new_black_24dp"
+                android:title="@string/logout" />
         </menu>
     </item>
 
