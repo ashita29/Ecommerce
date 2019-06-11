@@ -7,9 +7,11 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MainActivity"
     tools:ignore="ExtraText"
-    tools:showIn="@layout/app_bar_main">
+    tools:showIn="@layout/app_bar_main"
+   >
 
- <LinearLayout
+ <RelativeLayout
+     android:id="@+id/slider_container"
      android:layout_width="match_parent"
      android:layout_height="wrap_content"
      android:orientation="vertical"
@@ -37,12 +39,45 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="10dp"
       android:gravity="center"
-      android:orientation="horizontal">
+      android:orientation="horizontal"
+      android:layout_below="@id/image_slider">
 
   </LinearLayout>
 
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/horizontal_dots">
 
- </LinearLayout>
+   <TextView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:id="@+id/category_text"
+       android:text="@string/categories"
+       android:textColor="@color/colorPrimary"
+       android:textSize="25dp"/>
+
+  </RelativeLayout>
+
+ </RelativeLayout>
+
+ <android.support.constraint.ConstraintLayout
+     android:layout_width="match_parent"
+     android:layout_height="0dp"
+     app:layout_constraintBottom_toBottomOf="parent"
+     app:layout_constraintTop_toBottomOf="@id/slider_container">
+
+  <android.support.v7.widget.RecyclerView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:id="@+id/recycler_view_category"
+      android:orientation="vertical">
+
+  </android.support.v7.widget.RecyclerView>
+
+
+
+ </android.support.constraint.ConstraintLayout>
 
 
 

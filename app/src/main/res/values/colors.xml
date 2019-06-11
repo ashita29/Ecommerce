@@ -6,5 +6,7 @@
 
     <color name="active_dots">#F51018</color>//00574B
     <color name="inactive_dots">#EB494545</color>
+    <color name="oliveGreen">#14554A</color>
+    //<color name="CategoryViewBG">#11F4031F</color>
 
 </resources>
