@@ -2,25 +2,26 @@ package com.ashita.ecommerce.model;
 
 public class Category {
 
-     String title, imageURL;
+     private String Title, ImageURL;
 
     public Category() {
 
+       
     }
 
     public String getTitle() {
-        return title;
+        return Title;
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        Title = title;
     }
 
     public String getImageURL() {
-        return imageURL;
+        return ImageURL;
     }
 
     public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+        ImageURL = imageURL;
     }
 }

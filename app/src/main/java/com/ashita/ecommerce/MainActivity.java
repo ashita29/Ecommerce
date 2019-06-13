@@ -9,11 +9,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -31,7 +33,12 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.ashita.ecommerce.adapter.CategoryRecyclerViewAdapter;
+import com.ashita.ecommerce.adapter.CategoryViewHolder;
 import com.ashita.ecommerce.adapter.ImageSliderAdapter;
+import com.ashita.ecommerce.model.Category;
+import com.ashita.ecommerce.utilities.Common;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -45,13 +52,16 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.core.utilities.Utilities;
 
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     FirebaseAuth mAuth;
     FirebaseAuth.AuthStateListener mAuthListener;
@@ -68,6 +78,10 @@ public class MainActivity extends AppCompatActivity
     private ViewPager imageSlider;
     private LinearLayout dotsLayout;
     private int custom_position =0;
+    FirebaseDatabase cFirebaseDatabase;
+    DatabaseReference cRef;
+    private RecyclerView categoryRecyclerView;
+    private static View view;
 
     private static final String TAG = "MainActivity";
     private static final int NUM_COLUMNS =2;
@@ -78,6 +92,14 @@ public class MainActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+
+        if(Common.checkInternetConnection(MainActivity.this))
+        {
+            callRecyclerView();
+        }
+        else
+            Common.showInternetAlertMsg(MainActivity.this);
+
     }
 
     @Override
@@ -89,7 +111,6 @@ public class MainActivity extends AppCompatActivity
         FloatingActionButton fab = findViewById(R.id.fab);
         imageSlider = findViewById(R.id.image_slider);
         dotsLayout = findViewById(R.id.horizontal_dots);
-
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +128,6 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         mAuth = FirebaseAuth.getInstance();
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -118,7 +138,26 @@ public class MainActivity extends AppCompatActivity
             }
         };
 
-        //Image Slider workinh
+        if(Common.checkInternetConnection(MainActivity.this))
+        {
+            loadImageSlider();
+            initCategoryRecyclerView();
+        }
+        else
+        {
+            Common.showInternetAlertMsg(MainActivity.this);
+        }
+
+
+        //Image Slider working
+        //RecyclerView for categories
+       // initCategoryData();
+
+
+    }
+
+    public void loadImageSlider()
+    {
         ImageSliderAdapter imageAdapter = new ImageSliderAdapter(this,imageUrls);
         imageSlider.setAdapter(imageAdapter);
         prepareDots(custom_position++);
@@ -146,12 +185,37 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        //RecyclerView for categories
-        initCategoryData();
-
     }
 
-    public void initCategoryData()
+    public void callRecyclerView()
+    {
+        FirebaseRecyclerOptions<Category> options = new FirebaseRecyclerOptions.Builder<Category>()
+                .setQuery(cRef,Category.class)
+                .build();
+
+        FirebaseRecyclerAdapter<Category, CategoryViewHolder> firebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<Category, CategoryViewHolder>(options) {
+                    @NonNull
+                    @Override
+                    public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+
+                        View view = LayoutInflater.from(viewGroup.getContext())
+                                .inflate(R.layout.card_view_category,viewGroup,false);
+                        return new CategoryViewHolder(view);
+                    }
+
+
+                    @Override
+                    protected void onBindViewHolder(@NonNull CategoryViewHolder holder, int position, @NonNull Category model) {
+
+                        holder.setCategory(getApplicationContext(),model.getTitle(),model.getImageURL());
+                    }
+                };
+
+        firebaseRecyclerAdapter.startListening();
+        categoryRecyclerView.setAdapter(firebaseRecyclerAdapter);
+    }
+   /* public void initCategoryData()
     {
         Log.d(TAG, "initCategoryRecyclerView: is called");
         cardViewImageUrls.add("https://cdn.pixabay.com/photo/2016/11/11/23/34/cat-1817970_960_720.jpg");
@@ -170,16 +234,20 @@ public class MainActivity extends AppCompatActivity
         cardViewNames.add("butterfly");
 
         initCategoryRecyclerView();
-    }
+    }*/
 
     private void initCategoryRecyclerView() {
 
         Log.d(TAG, "initCategoryRecyclerView: called");
-        RecyclerView categoryRecyclerView = findViewById(R.id.recycler_view_category);
-        CategoryRecyclerViewAdapter categoryRecyclerViewAdapter = new CategoryRecyclerViewAdapter(this, cardViewNames,cardViewImageUrls);
+        categoryRecyclerView = findViewById(R.id.recycler_view_category);
+        //CategoryRecyclerViewAdapter categoryRecyclerViewAdapter = new CategoryRecyclerViewAdapter(this, cardViewNames,cardViewImageUrls);
         StaggeredGridLayoutManager staggeredGridLayoutManager= new StaggeredGridLayoutManager(NUM_COLUMNS, LinearLayoutManager.VERTICAL);
         categoryRecyclerView.setLayoutManager(staggeredGridLayoutManager);
-        categoryRecyclerView.setAdapter(categoryRecyclerViewAdapter);
+        //categoryRecyclerView.setAdapter(categoryRecyclerViewAdapter);
+
+        //Firebase , send query to Firebase Database
+        cFirebaseDatabase = FirebaseDatabase.getInstance();
+        cRef = cFirebaseDatabase.getReference("MainPageCategoryList");
     }
 
 
@@ -244,6 +312,9 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+
+        finishAffinity();
+        finish();
     }
 
     @Override
@@ -258,6 +329,7 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        onBackPressed();
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -293,4 +365,5 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

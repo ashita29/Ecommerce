@@ -6,12 +6,16 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.ashita.ecommerce.utilities.Common;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -36,6 +40,7 @@ public class SignInActivity extends AppCompatActivity {
     private final static  int RC_SIGN_IN = 9001;
     GoogleSignInClient mGoogleSignInClient;
     private String TAG = "mainActivity";
+    private static View snackBarview;
 
     FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -55,20 +60,20 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
+        snackBarview = findViewById(R.id.content);
 
         //Google SignIn
         signInButton = findViewById(R.id.sign_in_button);
         mAuth = FirebaseAuth.getInstance();
-
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(firebaseAuth.getCurrentUser() != null)
-                {
-                    startActivity(new Intent(SignInActivity.this, MainActivity.class));
+            mAuthListener = new FirebaseAuth.AuthStateListener() {
+                @Override
+                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                    if(firebaseAuth.getCurrentUser() != null)
+                    {
+                        startActivity(new Intent(SignInActivity.this, MainActivity.class));
+                    }
                 }
-            }
-        };
+            };
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -109,10 +114,20 @@ public class SignInActivity extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
-                Toast.makeText(SignInActivity.this,"FAILED",Toast.LENGTH_LONG).show();
-                Log.w(TAG, "Google sign in failed", e);
-                // ...
+
+                if(!Common.checkInternetConnection(SignInActivity.this))
+                {
+                    Common.showInternetAlertMsg(SignInActivity.this);
+                }
+                else
+                {
+                    //Snackbar snackbar = Snackbar.make(snackBarview,"Authentication Failed",Snackbar.LENGTH_LONG);
+                    //snackbar.show();
+                    // Google Sign In failed, update UI appropriately
+                    Toast.makeText(SignInActivity.this,"FAILED",Toast.LENGTH_LONG).show();
+                    Log.w(TAG, "Google sign in failed", e);
+                    // ...
+                }
             }
         }
     }
@@ -129,16 +144,24 @@ public class SignInActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(SignInActivity.this,"User is firebaseAuthWithGoogle",Toast.LENGTH_LONG).show();
-                            updateUI(user);
+                            if(Common.checkInternetConnection(SignInActivity.this))
+                            {
+                                updateUI(user);
+                              //  Snackbar snackbar = Snackbar.make(snackBarview,"Authentication Passed",Snackbar.LENGTH_LONG);
+                               // snackbar.show();
+
+                            }
+                            else
+                                Common.showInternetAlertMsg(SignInActivity.this);
                         } else {
                             // If sign in fails, display a message to the user.
+                            //Snackbar snackbar = Snackbar.make(snackBarview,"Authentication Failed in firebase",Snackbar.LENGTH_LONG);
+                            //snackbar.show();
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(SignInActivity.this,"Not able to login",Toast.LENGTH_LONG).show();
                             //Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                             updateUI(null);
                         }
-
                         // ...
                     }
                 });
@@ -155,9 +178,21 @@ public class SignInActivity extends AppCompatActivity {
             Uri personPhoto = acct.getPhotoUrl();
 
             Toast.makeText(SignInActivity.this,"User is updateUI",Toast.LENGTH_LONG).show();
-
             startActivity(new Intent(SignInActivity.this,MainActivity.class));
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity();
+        finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return super.onOptionsItemSelected(item);
     }
 }
 
