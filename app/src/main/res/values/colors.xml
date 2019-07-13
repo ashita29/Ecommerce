@@ -7,6 +7,9 @@
     <color name="active_dots">#F51018</color>//00574B
     <color name="inactive_dots">#EB494545</color>
     <color name="oliveGreen">#14554A</color>
-    //<color name="CategoryViewBG">#11F4031F</color>
+    <color name="black">#141414</color>
+    <color name="grey">#70141414</color>
+    <color name="CategoryViewBG">#11F4031F</color>
+    <color name="ripple_color">#F7E91E9F</color>
 
 </resources>

@@ -3,6 +3,10 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+
+        <!-- THe below line will be created whenever a new activity is created , but it will make the bar above toolbar as white/transaparent,
+        so its better to comment it.
         <item name="android:statusBarColor">@android:color/transparent</item>
+        -->
     </style>
 </resources>

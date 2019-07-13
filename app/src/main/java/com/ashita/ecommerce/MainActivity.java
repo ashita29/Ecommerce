@@ -29,14 +29,15 @@ import android.view.Menu;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.ashita.ecommerce.adapter.CategoryRecyclerViewAdapter;
 import com.ashita.ecommerce.adapter.CategoryViewHolder;
 import com.ashita.ecommerce.adapter.ImageSliderAdapter;
 import com.ashita.ecommerce.model.Category;
 import com.ashita.ecommerce.utilities.Common;
+import com.ashita.ecommerce.utilities.ItemClickListener;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -65,6 +66,9 @@ public class MainActivity extends AppCompatActivity
 
     FirebaseAuth mAuth;
     FirebaseAuth.AuthStateListener mAuthListener;
+    DrawerLayout drawer;
+    FirebaseRecyclerAdapter<Category, CategoryViewHolder> firebaseRecyclerAdapter;
+
     private String[] imageUrls = new String[]{
             "https://cdn.pixabay.com/photo/2016/11/11/23/34/cat-1817970_960_720.jpg",
             "https://cdn.pixabay.com/photo/2017/12/21/12/26/glowworm-3031704_960_720.jpg",
@@ -88,6 +92,10 @@ public class MainActivity extends AppCompatActivity
     private ArrayList<String> cardViewImageUrls = new ArrayList<>();
     private ArrayList<String> cardViewNames = new ArrayList<>();
 
+
+    ProgressBar progressBar;
+    RelativeLayout sliderLayout, recyclerLayout;
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -106,11 +114,16 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
         imageSlider = findViewById(R.id.image_slider);
         dotsLayout = findViewById(R.id.horizontal_dots);
+        progressBar = findViewById(R.id.main_progress);
+        sliderLayout = findViewById(R.id.slider_container);
+        recyclerLayout = findViewById(R.id.recycler_container);
+
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,7 +132,7 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -147,13 +160,6 @@ public class MainActivity extends AppCompatActivity
         {
             Common.showInternetAlertMsg(MainActivity.this);
         }
-
-
-        //Image Slider working
-        //RecyclerView for categories
-       // initCategoryData();
-
-
     }
 
     public void loadImageSlider()
@@ -193,7 +199,7 @@ public class MainActivity extends AppCompatActivity
                 .setQuery(cRef,Category.class)
                 .build();
 
-        FirebaseRecyclerAdapter<Category, CategoryViewHolder> firebaseRecyclerAdapter =
+         firebaseRecyclerAdapter =
                 new FirebaseRecyclerAdapter<Category, CategoryViewHolder>(options) {
                     @NonNull
                     @Override
@@ -206,36 +212,26 @@ public class MainActivity extends AppCompatActivity
 
 
                     @Override
-                    protected void onBindViewHolder(@NonNull CategoryViewHolder holder, int position, @NonNull Category model) {
+                    protected void onBindViewHolder(@NonNull CategoryViewHolder holder, final int position, @NonNull Category model) {
 
-                        holder.setCategory(getApplicationContext(),model.getTitle(),model.getImageURL());
+                        holder.setCategory(getApplicationContext(),model.getTitle(),model.getImageURL(),progressBar,sliderLayout,recyclerLayout);
+
+                        //For product view page(2nd page)
+                        holder.setItemClickListener(new ItemClickListener() {
+                            @Override
+                            public void onItemClick(View v, int pos) {
+                                Intent productList = new Intent(MainActivity.this,ProductListActivity.class);
+                                productList.putExtra("id",firebaseRecyclerAdapter.getRef(position).getKey());
+                                startActivity(productList);
+
+                            }
+                        });
                     }
                 };
 
         firebaseRecyclerAdapter.startListening();
         categoryRecyclerView.setAdapter(firebaseRecyclerAdapter);
     }
-   /* public void initCategoryData()
-    {
-        Log.d(TAG, "initCategoryRecyclerView: is called");
-        cardViewImageUrls.add("https://cdn.pixabay.com/photo/2016/11/11/23/34/cat-1817970_960_720.jpg");
-        cardViewNames.add("cat");
-
-        cardViewImageUrls.add("https://cdn.pixabay.com/photo/2017/12/21/12/26/glowworm-3031704_960_720.jpg");
-        cardViewNames.add("glowworm");
-
-        cardViewImageUrls.add("https://cdn.pixabay.com/photo/2017/12/24/09/09/road-3036620_960_720.jpg");
-        cardViewNames.add("road");
-
-        cardViewImageUrls.add("https://cdn.pixabay.com/photo/2017/11/07/00/07/fantasy-2925250_960_720.jpg");
-        cardViewNames.add("fantasy");
-
-        cardViewImageUrls.add("https://cdn.pixabay.com/photo/2017/10/10/15/28/butterfly-2837589_960_720.jpg");
-        cardViewNames.add("butterfly");
-
-        initCategoryRecyclerView();
-    }*/
-
     private void initCategoryRecyclerView() {
 
         Log.d(TAG, "initCategoryRecyclerView: called");

@@ -43,8 +43,10 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 
-
-
+    //elegenat number button
+    implementation 'com.cepheuen.elegant-number-button:lib:1.0.2'
+    //ripple button for 'Add to cart'
+    implementation 'com.balysv:material-ripple:1.0.2'
 
     /************************************************************************/
     testImplementation 'junit:junit:4.12'
