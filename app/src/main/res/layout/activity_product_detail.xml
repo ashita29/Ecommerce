@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProductDetailActivity">
+    tools:context=".ProductDetailActivity"
+    android:id="@+id/pd_constraintLO">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout2"
@@ -24,6 +25,23 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
+
+
+    <com.andremion.counterfab.CounterFab
+        android:id="@+id/floating_cartButton"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:tint="@android:color/white"
+        app:elevation="6dp"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toTopOf="@+id/product_name"
+        app:layout_constraintEnd_toEndOf="@+id/appBarLayout2"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout2"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/ic_shopping_cart_black_24dp" />
+
 
     <TextView
         android:id="@+id/product_name"
@@ -175,7 +193,8 @@
         android:clickable="true"
         android:focusable="true"
         app:mrl_rippleColor="@color/ripple_color"
-        app:mrl_rippleAlpha="0.1">
+        app:mrl_rippleAlpha="0.1"
+        android:id="@+id/pd_rippleLo_addtocart">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"

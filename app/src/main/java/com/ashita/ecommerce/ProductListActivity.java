@@ -88,7 +88,7 @@ public class ProductListActivity extends AppCompatActivity {
 
         firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Product, ProductViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull final Product model) {
+            protected void onBindViewHolder(@NonNull ProductViewHolder holder, final int position, @NonNull final Product model) {
 
                 holder.setProductView(getApplicationContext(),model.getImageUrl(),model.getName(),model.getDescription(),model.getPrice());
                 holder.setItemClickListener(new ItemClickListener() {
@@ -96,6 +96,7 @@ public class ProductListActivity extends AppCompatActivity {
                     public void onItemClick(View v, int pos) {
                         Bundle bundle = new Bundle();
                         bundle.putString("id",productID);
+                        bundle.putString("productId",firebaseRecyclerAdapter.getRef(position).getKey());
                         bundle.putString("productImage",model.getImageUrl());
                         bundle.putString("productName",model.getName());
                         bundle.putString("productDescription",model.getDescription());

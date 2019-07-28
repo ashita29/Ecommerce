@@ -344,16 +344,14 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_tools) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_logout) {
+        }  else if (id == R.id.nav_logout) {
             mAuth.signOut();
+
+        }
+        else if(id == R.id.nav_shoppingcart)
+        {
+            Intent intent = new Intent(MainActivity.this,ShoppingCartActivity.class);
+            startActivity(intent);
 
         }
 

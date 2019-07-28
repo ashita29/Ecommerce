@@ -25,6 +25,9 @@
     <string name="_12">12</string>
     <string name="dollar">$</string>
     <string name="add_to_cart">ADD TO CART</string>
+    <string name="proceed_to_checkout">PROCEED TO CHECKOUT</string>
+    <string name="items">items</string>
+    <string name="item">item</string>
 
     <string-array name="size_spinner">
         <item>Size</item>
