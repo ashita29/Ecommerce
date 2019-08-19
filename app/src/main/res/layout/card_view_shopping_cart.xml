@@ -56,7 +56,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/dollar"
+        android:id="@+id/dollar_OH"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -75,7 +75,7 @@
         app:layout_constraintBottom_toTopOf="@+id/elegantNumberButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.03"
-        app:layout_constraintStart_toEndOf="@+id/dollar" />
+        app:layout_constraintStart_toEndOf="@+id/dollar_OH" />
 
     <ImageView
         android:id="@+id/delete_button_sc"

@@ -65,7 +65,33 @@ public class DatabaseHelper extends SQLiteAssetHelper {
         return result;
     }
 
-    public  void deleteFromCart(String userEmail)
+    //New function which will return everything apart from useremail;
+    public List<Product> getCartDetailsWOEmail(String userEmail)
+    {
+        SQLiteDatabase db = getReadableDatabase();
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+        String[] sqlSelect = {"ProductId","ProductName","ProductPrice","ProductShippingPrice","ProductImage","ProductQuantity"};
+        String sqlTable = "OrderDetail";
+
+        qb.setTables(sqlTable);
+        Cursor cursor = qb.query(db,sqlSelect,"UserEmail=?",new String[]{userEmail},null,null,null);
+        final List<Product> result = new ArrayList<>();
+        if(cursor.moveToFirst())
+        {
+            do {
+                result.add(new Product(
+                        cursor.getString(cursor.getColumnIndex("ProductId")),
+                        cursor.getString(cursor.getColumnIndex("ProductName")),
+                        cursor.getString(cursor.getColumnIndex("ProductPrice")),
+                        cursor.getString(cursor.getColumnIndex("ProductShippingPrice")),
+                        cursor.getString(cursor.getColumnIndex("ProductImage")),
+                        cursor.getString(cursor.getColumnIndex("ProductQuantity"))));
+            }while (cursor.moveToNext());
+        }
+        return result;
+    }
+
+    public void deleteFromCart(String userEmail)
     {
         SQLiteDatabase db = getReadableDatabase();
         String query = String.format("DELETE FROM OrderDetail WHERE UserEmail='%s'",userEmail);

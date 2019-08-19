@@ -45,7 +45,6 @@ public class ProductListActivity extends AppCompatActivity {
         if(Common.checkInternetConnection(ProductListActivity.this))
         {
             productRecyclerView();
-
         }
         else
         {

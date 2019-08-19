@@ -14,15 +14,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".OrderHistoryDetailActivity" />
 
         <activity
+            android:name=".OrderHistoryActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CheckoutActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".ShoppingCartActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ProductDetailActivity"
             android:parentActivityName=".ProductListActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ProductListActivity"
             android:parentActivityName=".MainActivity"

@@ -11,5 +11,6 @@
     <color name="grey">#70141414</color>
     <color name="CategoryViewBG">#11F4031F</color>
     <color name="ripple_color">#F7E91E9F</color>
+    <color name="white">#00E91E9F</color>
 
 </resources>

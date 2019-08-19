@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ShoppingCartActivity">
+    tools:context=".ShoppingCartActivity"
+    android:id="@+id/shopping_cart_constraint">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -25,7 +26,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <com.balysv.materialripple.MaterialRippleLayout
-        android:id="@+id/materialRippleLayout2"
+        android:id="@+id/proceed_ripple_button"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/CategoryViewBG"
@@ -69,7 +70,7 @@
         android:textStyle="bold"
         android:layout_marginStart="8dp"
         android:text="Subtotal ("
-        app:layout_constraintBottom_toTopOf="@+id/materialRippleLayout2"
+        app:layout_constraintBottom_toTopOf="@+id/proceed_ripple_button"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -79,7 +80,7 @@
         android:textColor="@color/black"
         android:textStyle="bold"
         android:text="2"
-        app:layout_constraintBottom_toTopOf="@+id/materialRippleLayout2"
+        app:layout_constraintBottom_toTopOf="@+id/proceed_ripple_button"
         app:layout_constraintStart_toEndOf="@+id/item_count" />
 
     <TextView
@@ -90,7 +91,7 @@
         android:textStyle="bold"
         android:layout_marginStart="8dp"
         android:text="Items"
-        app:layout_constraintBottom_toTopOf="@+id/materialRippleLayout2"
+        app:layout_constraintBottom_toTopOf="@+id/proceed_ripple_button"
         app:layout_constraintStart_toEndOf="@+id/itemNum" />
 
     <TextView
@@ -100,7 +101,7 @@
         android:textColor="@color/black"
         android:textStyle="bold"
         android:text="): $"
-        app:layout_constraintBottom_toTopOf="@+id/materialRippleLayout2"
+        app:layout_constraintBottom_toTopOf="@+id/proceed_ripple_button"
         app:layout_constraintStart_toEndOf="@+id/items_sc" />
 
     <TextView
@@ -111,7 +112,7 @@
         android:textStyle="bold"
         android:layout_marginStart="6dp"
         android:text="20"
-        app:layout_constraintBottom_toTopOf="@+id/materialRippleLayout2"
+        app:layout_constraintBottom_toTopOf="@+id/proceed_ripple_button"
         app:layout_constraintStart_toEndOf="@+id/dollar_sc" />
 
     <android.support.v7.widget.RecyclerView

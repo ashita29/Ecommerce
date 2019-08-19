@@ -28,7 +28,31 @@
     <string name="proceed_to_checkout">PROCEED TO CHECKOUT</string>
     <string name="items">items</string>
     <string name="item">item</string>
-
+    <string name="enter_your_information">Enter your information</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="enter_mobile_number">Enter mobile number</string>
+    <string name="address">Address</string>
+    <string name="city">City</string>
+    <string name="state">State</string>
+    <string name="postal_code">Postal code</string>
+    <string name="country">Country</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="save_button">Save</string>
+    <string name="total">Total</string>
+    <string name="shipping">Shipping</string>
+    <string name="price">Price</string>
+    <string name="qty">Qty</string>
+    <string name="Item_checkout">Item</string>
+    <string name="_400">400</string>
+    <string name="_15">15</string>
+    <string name="_100">100</string>
+    <string name="_10">10</string>
+    <string name="productname_chekout">ProductName</string>
+    <string name="order_total">Order Total :</string>
+    <string name="order_id">Order ID :</string>
+    <string name="order_date">Order Date :</string>
+    <string name="order_history">Order History</string>
     <string-array name="size_spinner">
         <item>Size</item>
         <item>Small</item>
